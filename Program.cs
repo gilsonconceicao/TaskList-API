@@ -36,7 +36,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-// Define o IP e a porta desejada
 var ip = "192.168.100.123";
 var port = 5000;
 app.Run($"http://{ip}:{port}");
