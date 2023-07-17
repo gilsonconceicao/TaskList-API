@@ -29,7 +29,7 @@ public class TaskController : Controller
     public IActionResult CreateTask(CreateTaskDto newTask) 
     {
         if (newTask == null) 
-            return BadRequest("data not informated");
+            return BadRequest("Campos da tarefa não informados");
 
         try
         {
@@ -41,7 +41,7 @@ public class TaskController : Controller
         } 
         catch 
         {
-            return BadRequest("Error while creating task");
+            return BadRequest("Erro ao criar a tarefa");
         }
     }
 
@@ -53,7 +53,7 @@ public class TaskController : Controller
 
         if (taskById == null) 
         { 
-           return NotFound("Task not found");
+           return NotFound("Tarefa não encontrada");
         }
 
         try
@@ -66,7 +66,7 @@ public class TaskController : Controller
         }
         catch
         {
-            return BadRequest("Error while updating task");
+            return BadRequest("Erro ao atualizar a tarefa");
         }
     }
 
@@ -75,17 +75,17 @@ public class TaskController : Controller
     {
         var taskById = _dbTasks.Tasks.FirstOrDefault(task => task.Id == Id);
         if (taskById == null)
-            return NotFound("Task not found"); 
+            return NotFound("Tarefa não encontrada"); 
         
         try
         {
             _dbTasks.Remove(taskById);
             _dbTasks.SaveChanges(); 
-            return Ok("Task removed with success");
+            return Ok();
         }
         catch
         {
-            return BadRequest("Error while removing task");
+            return BadRequest("Erro ao remover a tarefa");
         }
     }
 }
