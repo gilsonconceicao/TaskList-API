@@ -20,9 +20,23 @@ public class TaskController : Controller
     }
 
     [HttpGet] 
-    public IEnumerable<Tasks> GetTask()
+    public IActionResult GetTask(int page = 0, int size = 5)
+    { 
+        var taskList = _mapper.Map<List<ReadTaskDto>>(
+           _dbTasks.Tasks
+           .Skip(page * size)
+           .Take(size)
+           .ToList() 
+        );
+        return Ok(taskList);       
+    }
+
+    [HttpGet("{Id}")]
+    public IActionResult GetTaskByid(Guid Id)
     {
-        return _dbTasks.Tasks;  
+        var taskById = _dbTasks.Tasks.FirstOrDefault(task => task.Id == Id);
+        if (taskById == null) return NotFound("Tarefa não encontrada");
+        return Ok(taskById);
     }
 
     [HttpPost]
