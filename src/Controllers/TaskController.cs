@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using TaskLIst_API.src.Contexts;
 using TaskLIst_API.src.DTOs;
 using TaskLIst_API.src.Models;
@@ -9,7 +10,6 @@ namespace TaskLIst_API.src.Controllers;
 [Route("[Controller]")]
 public class TaskController : Controller
 {
-
     private readonly TaskContext _dbTasks;
     private readonly IMapper _mapper;
      
@@ -20,7 +20,11 @@ public class TaskController : Controller
     }
 
     [HttpGet] 
-    public IActionResult GetTask(int page = 0, int size = 5)
+    public IActionResult GetTask(
+        [FromQuery] string? title, 
+        [FromQuery] int page = 0, 
+        [FromQuery] int size = 5
+    )
     { 
         var taskList = _mapper.Map<List<ReadTaskDto>>(
            _dbTasks.Tasks
@@ -28,6 +32,10 @@ public class TaskController : Controller
            .Take(size)
            .ToList() 
         );
+        if (title != null)
+        {
+           return Ok(taskList.Where(task => task.Title == title));
+        }  
         return Ok(taskList);       
     }
 
